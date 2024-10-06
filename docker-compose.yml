@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  scraper:  # Ensure this matches your service name
+    build:
+      context: ./python  # Path to the directory containing your Dockerfile
+      dockerfile: Dockerfile  # Name of your Dockerfile
+    command: tail -f /dev/null  # Keep the container running
+    volumes:
+      - /Users/itang/Music/Programming/Projects/Coursinator/coursinator.ai:/workspaces/coursinator.ai  # Map local directory to the container
+    tty: true
+    ports:
+      - "1425:1425"
+
+  springboot-app:  # New service for your Spring Boot application
+    build:
+      context: ./backend  # Build context, adjust if your Dockerfile is in a different directory
+      dockerfile: Dockerfile  # Ensure this is the path to your Spring Boot Dockerfile
+    ports:
+      - "8080:8080"  # Map port 8080 for your Spring Boot application
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev  # Optional: set environment variables as needed
+    volumes:
+      - /Users/itang/Music/Programming/Projects/Coursinator/coursinator.ai:/workspaces/coursinator.ai
