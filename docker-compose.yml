@@ -1,24 +1,44 @@
 version: '3.8'
 
 services:
-  scraper:  # Ensure this matches your service name
+  scraper:
     build:
-      context: ./python  # Path to the directory containing your Dockerfile
-      dockerfile: Dockerfile  # Name of your Dockerfile
-    command: tail -f /dev/null  # Keep the container running
+      context: ./python
+      dockerfile: Dockerfile
+    command: tail -f /dev/null
     volumes:
-      - /Users/itang/Music/Programming/Projects/Coursinator/coursinator.ai:/workspaces/coursinator.ai  # Map local directory to the container
+      - ./scraper:/workspaces/scraper 
     tty: true
     ports:
       - "1425:1425"
 
-  springboot-app:  # New service for your Spring Boot application
+  springboot-app:
     build:
-      context: ./backend  # Build context, adjust if your Dockerfile is in a different directory
-      dockerfile: Dockerfile  # Ensure this is the path to your Spring Boot Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"  # Map port 8080 for your Spring Boot application
+      - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev  # Optional: set environment variables as needed
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/course_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    depends_on:
+      - mysql
     volumes:
-      - /Users/itang/Music/Programming/Projects/Coursinator/coursinator.ai:/workspaces/coursinator.ai
+      - ./backend:/workspaces/backend
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: course_db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:  # mount the files you are using so everyone can run it within the containers
+      - mysql-data:/var/lib/mysql
+      - ./backend/mysql/create_tables.sql:/create_tables.sql
+
+volumes:
+  mysql-data:
