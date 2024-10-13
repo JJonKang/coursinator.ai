@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Application<coursinator>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "TeleSxope.coursinator.Application",
+            "projectName": "coursinator",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
