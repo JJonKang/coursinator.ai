@@ -1,0 +1,24 @@
+# Create a new Vite project
+pnpm create vite@latest my-react-app --template react-ts
+
+# Navigate into the project directory
+cd my-react-app
+
+# Install React Router DOM
+pnpm add react-router-dom
+
+# Install Redux Toolkit or Zustand (choose one for state management)
+pnpm add @reduxjs/toolkit react-redux  # Redux Toolkit
+# OR
+pnpm add zustand                      # Zustand
+
+# Install TailwindCSS
+pnpm add -D tailwindcss postcss autoprefixer
+
+# Generate the Tailwind configuration
+pnpm tailwindcss init -p
+
+
+
+
+When installing any new packages, make sure to update the package.json, as that will be used to install new packages
